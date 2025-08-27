@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 class CaixaDAgua (//Os 2 parenteses são Construtor da Classe
     val material: Material,
-    val capacidade : Int,
+    val capacidade : Double,
     val cor : Cores,
     val peso : Double,
     val preco : BigDecimal,
