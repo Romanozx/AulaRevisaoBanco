@@ -4,13 +4,14 @@ import org.example.enumeradores.Cores
 import org.example.enumeradores.Material
 import java.math.BigDecimal
 
-class CaixaDAgua (//Os 2 parenteses são Construtor da Classe
+class CaixaDAgua(//Os 2 parenteses são Construtor da Classe
+    val id: Int.Companion,
     val material: Material,
-    val capacidade : Double,
-    val cor : Cores,
-    val peso : Double,
-    val preco : BigDecimal,
-    val dimenssao : Array<Double>
+    val capacidade: Double,
+    val cor: Cores,
+    val peso: Double,
+    val preco: BigDecimal,
+    val dimenssao: Array<Double>
 )//Aqui vai todos os atributos da classe
 {
 

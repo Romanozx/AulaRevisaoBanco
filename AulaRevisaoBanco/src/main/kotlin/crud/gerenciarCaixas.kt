@@ -3,7 +3,7 @@ package org.example.crud
 import org.example.entidades.CaixaDAgua
 import org.example.enumeradores.Cores
 import org.example.enumeradores.Material
-import java.sql.Connection
+import java.sql.ResultSet
 
 val conectar = EntidadeJDBC(
     //Porta 5433 ou 5432
@@ -12,7 +12,7 @@ val conectar = EntidadeJDBC(
     senha = "postgres"
 )
 
-fun criarTabelaCaixa(){
+fun criarTabelaCaixa() {
 
     //Colocar o mesmo nome da Tabela o nome da Entidade!
     val sql = "CREATE TABLE IF NOT EXISTS CaixaDAgua " +
@@ -97,7 +97,8 @@ fun cadastrarCaixa() {
     //Salvar as variáveis agora dentro da classe
     //Conecte o atributo da classe a variável que o usuáruio digitou
 
-     val c = CaixaDAgua(
+    val c = CaixaDAgua(
+        id = Int,
         material = material,
         capacidade = capacidade,
         cor = cor,
@@ -111,27 +112,78 @@ fun cadastrarCaixa() {
                 " VALUES (?, ?, ?, ?, ?, ?)"
     )
     val d = "${c.dimenssao[0]}, ${c.dimenssao[1]}, ${c.dimenssao[2]}"
-        banco.setString(1, c.material.name)//Enum deve sempre usar .name no final
-        banco.setDouble(2, c.capacidade)//Atributos nulos devem ser seguidos de !!
-        banco.setString(3, c.cor.name)
-        banco.setDouble(4, c.peso)
-        banco.setString(5, c.preco.toString())
-        banco.setString(6, d)
+    banco.setString(1, c.material.name)//Enum deve sempre usar .name no final
+    banco.setDouble(2, c.capacidade)//Atributos nulos devem ser seguidos de !!
+    banco.setString(3, c.cor.name)
+    banco.setDouble(4, c.peso)
+    banco.setString(5, c.preco.toString())
+    banco.setString(6, d)
 
     banco.executeUpdate()//Isso fará um COMMIT no banco
 
     banco.close()//Fecha a transação e a conexão com o banco
 
+}
+
+fun editarCaixa() {
+
+}
+
+fun listarCaixas() {
+    val banco = conectar.conectarComBanco()
+    val sql = "SELECT * FROM CaixaDAgua"
+    val resultados: ResultSet = banco!!.createStatement().executeQuery(sql)
+
+    while (resultados.next()) {
+        //Para cada consulta, use o nome que está no BANCO!
+        println("-----------------------------------------------")
+        println("ID: ${resultados.getString("id")}")
+        println("Material: ${resultados.getString("material")}")
+        println("Capaecidade: ${resultados.getString("capacidade")}")
+        println("Cor: ${resultados.getString("cor")}")
+        println("Peso: ${resultados.getString("peso")}")
+        println("Preço: ${resultados.getString("preco")}")
+        println("Dimenssão: ${resultados.getString("dimenssao")}")
+
     }
 
-    fun editarCaixa() {
-
-    }
-
-    fun listarCaixas() {
-
-    }
 
     fun excluirCaixa() {
+        println("Digite o ID que deseja excluir")
+        val id = readln().toInt()
+
+        val banco = conectar.conectarComBanco()
+        val sqlBusca = "SELECT * FROM CaixaDAgua WHERE id = ?"
+        val resultados = banco!!.prepareStatement(sqlBusca)
+        resultados.setInt(1, id)
+        val retorno = resultados.executeQuery()
+
+        while (retorno.next()) {
+
+            println("-----------------------------------------------")
+            println("ID: ${retorno.getString("id")}")
+            println("Material: ${retorno.getString("material")}")
+            println("Capacidade: ${retorno.getString("capacidade")}")
+            println("Cor: ${retorno.getString("cor")}")
+            println("Peso: ${retorno.getString("peso")}")
+            println("Preço: ${retorno.getString("preco")}")
+            println("Dimenssão: ${retorno.getString("dimenssao")}")
+
+        }
+
+        println("Tem certeza que deseja excluir esse registro?")
+        val resposta = readln().lowercase()
+        when (resposta) {
+            "Sim" -> {
+                val deletar = banco.prepareStatement("DELETE FROM CaixaDAgua WHERE id = ?")
+                deletar.setInt(1, id)//Diz qual é o valor do 1° ponto de Interrogação (?)
+                deletar.executeUpdate()//Manda a instrução para ser executada no banco
+            }
+
+            else -> {
+                println("Operação cancelada!")
+            }
+        }
 
     }
+}
