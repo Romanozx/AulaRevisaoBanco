@@ -3,6 +3,7 @@ package org.example.ui
 import org.example.crud.cadastrarCaixa
 import org.example.crud.editarCaixa
 import org.example.crud.excluirCaixa
+
 import org.example.crud.listarCaixas
 
 fun menu(){
@@ -16,7 +17,7 @@ fun menu(){
         val opcao = readln().toInt()
         when(opcao){
             0-> println("Saindo...")
-            1-> cadastrarCaixa()
+            1-> cadastrarCaixa(0)//Sempre que for cadastrar uma caixa nova o ID será 0
             2-> editarCaixa()
             3-> listarCaixas()
             4-> excluirCaixa()
