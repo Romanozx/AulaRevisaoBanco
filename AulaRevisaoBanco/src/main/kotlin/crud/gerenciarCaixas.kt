@@ -45,8 +45,8 @@ fun cadastrarCaixa(id : Int) {
     when (opcao) {
         1 -> material = Material.PLASTICO
         2 -> material = Material.PVC
-        2 -> material = Material.FIBRA
-        3 -> material = Material.METAL
+        3 -> material = Material.FIBRA
+        4 -> material = Material.METAL
         else -> material = Material.PLASTICO
     }
 
@@ -142,6 +142,7 @@ fun cadastrarCaixa(id : Int) {
     }
     banco.close()//Fecha a transação e a conexão com o banco
 }
+
 fun editarCaixa() {
     println("Digite o ID que deseja editar")
     var id = readln().toInt()
@@ -192,7 +193,7 @@ fun listarCaixas() {
 }
 
 fun excluirCaixa() {
-        println("Digite o ID que deseja excluir")
+        println("Digite o ID que deseja excluir:")
         val id = readln().toInt()
 
         val banco = conectar.conectarComBanco()
@@ -217,7 +218,7 @@ fun excluirCaixa() {
         println("Tem certeza que deseja excluir esse registro?")
         val resposta = readln().lowercase()
         when (resposta) {
-            "Sim" -> {
+            "sim" -> {
                 val deletar = banco.prepareStatement("DELETE FROM CaixaDAgua WHERE id = ?")
                 deletar.setInt(1, id)//Diz qual é o valor do 1° ponto de Interrogação (?)
                 deletar.executeUpdate()//Manda a instrução para ser executada no banco
